@@ -1,25 +1,43 @@
 #include<iostream>
 #include<stdio.h>
+#include<Windows.h>
+#include<time.h>
+#include<stdlib.h>
 
-int wages(int n) {
-	if (n <= 1) {
-		return (100);
-	}
-		return(wages(n-1)* 2 - 50);
+
+typedef void(*DFunc)(int*);
+
+void  DispResult(int* s) {
+	
 }
 
+void setTimeout(DFunc d, int second) {
+	Sleep(second * 1000);
+	d(&second);
+}
 
 int main() {
-	int result;
-	int Result;
-	for (int n = 1; n <= 15; n++) {
-		result = wages(n);
-		printf("再帰的な%d時間の給料=%d\n", n, result);
-	}
-	for (int n = 1; n <= 15; n++) {
-		Result = 1072 * n;
-		printf("一般的な%d時間の給料=%d\n", n, Result);
-	}
+	int dice;
+	int n;
 
-	return (0);
+	printf("サイコロを振るので、出目が半(奇数)か丁(偶数)かを当ててください\n");
+
+	srand((unsigned int)time(NULL));
+	dice = rand() % 6 + 1;
+
+	printf("半(奇数)か丁(偶数)か予想してください\n");
+	printf("半(奇数)だと思うなら1、丁(偶数)だと思うなら2を入力してください:");
+	scanf_s("%d", &n);
+
+	setTimeout(DispResult, 3);
+
+	if ((dice == 1 && n == 1) || (dice == 2 && n == 2) || (dice == 3 && n == 1) || (dice == 4 && n == 2) || (dice == 5 && n == 1) || (dice == 6 && n == 2)) {
+		printf("正解:");
+		printf("出目は%d\n", dice);
+	}
+	else {
+		printf("不正解:");
+		printf("出目は%d\n", dice);
+	}
+	return 0;
 }
