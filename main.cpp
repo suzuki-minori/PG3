@@ -9,14 +9,12 @@
 
 void  DispResult(int* s,int*key) {
 	
-	int dice = rand() % 6;
+	int dice = rand() % 6+1;
 
-	if (dice == *key) {
-		if (dice == 0)
+	if ((dice == 1 && *key == 0) || (dice == 2 && *key == 1) || (dice == 3 && *key == 0) || (dice == 4 && *key == 1) || (dice == 5 && *key == 0) || (dice == 6 && *key == 1)){
 			printf("正解:");
 			printf("出目は%d\n", dice);
 	}else {
-		if (dice == 1)
 			printf("不正解:");
 			printf("出目は%d\n", dice);
 		}
