@@ -1,51 +1,59 @@
-#include<iostream>
-#include<stdio.h>
-#include<Windows.h>
-#include<time.h>
-#include<stdlib.h>
-#include<functional>
+#include <iostream>
+using namespace std;
 
+class Enemy {
+public:
+    void Update();
 
+    void Approach(); // 接近
+    void Attack();   // 攻撃
+    void Retreat();  // 離脱
 
-void  DispResult(int* s,int*key) {
-	
-	int dice = rand() % 6+1;
+    // 関数ポインタテーブル
+    static void (Enemy::* table[])();
 
-	if ((dice == 1 && *key == 0) || (dice == 2 && *key == 1) || (dice == 3 && *key == 0) || (dice == 4 && *key == 1) || (dice == 5 && *key == 0) || (dice == 6 && *key == 1)){
-			printf("正解:");
-			printf("出目は%d\n", dice);
-	}else {
-			printf("不正解:");
-			printf("出目は%d\n", dice);
-		}
+private:
+    int index = 0;
+};
+
+void Enemy::Approach() {
+    cout << "敵が接近！" << endl;
 }
 
-void setTimeout(std::function<void(int*,int*)>p, int second,int key) {
-	
-	for (int i = 0; i < second; i++) {
-		Sleep(1000);
-		printf("%d...\n", second - i);
-	}
-	p(&second, &key);
+void Enemy::Attack() {
+    cout << "敵が攻撃！" << endl;
 }
+
+void Enemy::Retreat() {
+    cout << "敵が離脱" << endl;
+}
+
+void Enemy::Update() {
+
+    // 関数テーブルから関数を実行
+    (this->*table[index])();
+
+    cout << "次の状態に移行 (0: はい、 他: いいえ)";
+    int input;
+    cin >> input;
+
+    if (input == 0) {
+        index = (index + 1) % 3;
+    }
+}
+
+// メンバ関数ポインタテーブル
+void (Enemy::* Enemy::table[])() = {
+    &Enemy::Approach, // インデックス0
+    &Enemy::Attack,   // インデックス1
+    &Enemy::Retreat   // インデックス2
+};
 
 int main() {
-	
-	int key;
 
-	printf("サイコロを振るので、出目が半(奇数)か丁(偶数)かを当ててください\n");
+    Enemy enemy;
 
-	srand(static_cast<unsigned int>(time(NULL)));
-	
-	printf("半(奇数)か丁(偶数)か予想してください\n");
-	printf("半(奇数)だと思うなら0、丁(偶数)だと思うなら1を入力してください:");
-	scanf_s("%d", &key);
+    while (1)enemy.Update();
 
-	std::function<void(int*, int*)>p = [](int* s, int* key) {DispResult(s, key); };
-
-
-
-	setTimeout(p,3,key);
-
-	return 0;
+    return 0;
 }
